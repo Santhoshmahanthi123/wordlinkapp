@@ -9,7 +9,9 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cors());
 app.get('/',(req,res)=>{
-    res.send('welcome to wordlink application')
+    res.json({
+        'msg' :'welcome to wordlink application!'
+    })
 })
 app.listen(port,()=>{
     console.log(`listening to server on ${port} port`);
