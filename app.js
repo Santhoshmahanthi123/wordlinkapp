@@ -11,8 +11,11 @@ app.use(cors());
 app.get('/',(req,res)=>{
     res.json({
         'msg' :'welcome to wordlink application!'
-    })
-})
+    });
+});
+const wordRoutes = require('./routes/word');
+app.use('/word',wordRoutes);
+
 app.listen(port,()=>{
     console.log(`listening to server on ${port} port`);
     
