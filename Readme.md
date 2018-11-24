@@ -1,0 +1,1 @@
+This is a simple webapi which uses nodejs and express to build it and also uses wordlink api to generate results in the console for the given words.
