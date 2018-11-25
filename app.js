@@ -32,7 +32,7 @@ app.get('/',(req,res)=>{
     //     'msg' :'welcome to wordlink application!'
     // });
 });
-app.get('/:id',(req,res)=>{
+app.get('/dicant/:id',(req,res)=>{
     var config = {
         app_id : process.env.appId,
         app_key : process.env.appKey,
@@ -53,36 +53,31 @@ app.get('/:id',(req,res)=>{
     });
 });
 
-app.get('/quote',(req,res)=>{
-    const days = {
-        monday:"serry : to crowd closely together.",
-        tuesday:"waggish : roguish in merriment and good humor",
-        wednesday:"doorbuster : a device used to forcibly open a door.",
-        thursday:"thanksgiver : a person who gives thanks. ",
-        friday:"cornucopia : an abundant, overflowing supply.",
-        saturday :"sippet : a small piece of bread or the like for dipping in liquid food, as in gravy or milk; a small sop.",
-        sunday :"gallinaceous : pertaining to or resembling the domestic fowls.",
+    var days = {
+        monday:`word of the day is "serry" : "to crowd closely together."`,
+        tuesday:`word of the day is "waggish" : "roguish in merriment and good humor." `,
+        wednesday:`word of the day is "doorbuster" : "a device used to forcibly open a door."`,
+        thursday:`word of the day is "thanksgiver" : "a person who gives thanks."`,
+        friday:`word of the day is "cornucopia" : "an abundant, overflowing supply."`,
+        saturday :`word of the day is "sippet" : "a small piece of bread or the like for dipping in liquid food, as in gravy or milk; a small sop."`,
+        sunday :`word of the day is "gallinaceous" : "pertaining to or resembling the domestic fowls."`,
         }
-const d = new Date();
-const n = d.getDay()
+var d = new Date();
+var n = d.getDay()
 switch(n) {
     case 0 :
-    res.send(days.monday)
     console.log(days.monday)
     break;
 
     case 1 :
-    res.send(days.tuesday)
     console.log(days.tuesday)
     break;
 
     case 2 :
-    res.send(days.wednesday)
     console.log(days.wednesday)
     break;
 
     case 3 :
-    res.send(days.thursday)
     console.log(days.thursday)
     break;
 
@@ -91,12 +86,10 @@ switch(n) {
     break;
 
     case 5 :
-    res.send(days.saturday)
     console.log(days.saturday)
     break;
 
     case 6:
-    res.send(days.sunday)
     console.log(days.sunday)
     break;
 
@@ -104,11 +97,6 @@ switch(n) {
       console.log('Every day is a good day if you hustle...')
      
 }
-});
-  
-const wordRoutes = require('./routes/words');
-app.use('/word',wordRoutes);
-
 app.listen(port,()=>{
     console.log(`listening to server on ${port} port`);
     
