@@ -11,6 +11,26 @@ const app_key = process.env.appKey ;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cors());
+app.get('/dicdef/:id',(req,res)=>{
+    var config = {
+        app_id : process.env.appId,
+        app_key : process.env.appKey,
+        source_lang : "en"
+      };
+    
+    const dict = new Dictionary(config);
+    const lookup = dict.definitions(req.params.id);
+    
+    lookup.then(function(data) {
+        res.send(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]);
+        console.log(`The definition of the word ${req.params.id} is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
+
+    },
+    function(err) {
+        console.log(err);
+    });
+   
+});
 app.get('/dicsyn/:id',(req,res)=>{
     var config = {
         app_id : process.env.appId,
