@@ -72,6 +72,29 @@ app.get('/dicant/:id',(req,res)=>{
         console.log(err);
     });
 });
+app.get('/dicex/:id',(req,res)=>{
+    var config = {
+        app_id : process.env.appId,
+        app_key : process.env.appKey,
+        source_lang : "en"
+      };
+    
+    const dict = new Dictionary(config);
+    const lookup = dict.examples(req.params.id);
+    
+    lookup.then((data)=> {
+        res.send(`The example of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].examples[0].text}"`)
+        console.log(`The example of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].examples[0].text}"`)
+
+        // res.send(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+
+        // console.log(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+
+    },
+    function(err) {
+        console.log(err);
+    });
+});
 app.get('/',(req,res)=>{
     var days = {
         monday:`word of the day is "serry" : "to crowd closely together."`,
