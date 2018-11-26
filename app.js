@@ -21,11 +21,12 @@ app.get('/dicdef/:id',(req,res)=>{
     const dict = new Dictionary(config);
     const lookup = dict.definitions(req.params.id);
     
-    lookup.then(function(data) {
-        res.send(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]);
-        console.log(`The definition of the word ${req.params.id} is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
+    lookup.then((data)=> {
+        res.send(`The definition of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
+        console.log(`The definition of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
 
     },
+  
     function(err) {
         console.log(err);
     });
@@ -41,9 +42,9 @@ app.get('/dicsyn/:id',(req,res)=>{
     const dict = new Dictionary(config);
     const lookup = dict.synonyms(req.params.id);
     
-    lookup.then(function(data) {
-        res.send(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id);
-        console.log(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id);
+    lookup.then((data) =>{
+        res.send(`The synonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id}"`);
+        console.log(`The synonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id}"`);
 
     },
     function(err) {
