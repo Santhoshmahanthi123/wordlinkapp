@@ -11,7 +11,7 @@ const app_key = process.env.appKey ;
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(cors());
-app.get('/',(req,res)=>{
+app.get('/dicsyn/:id',(req,res)=>{
     var config = {
         app_id : process.env.appId,
         app_key : process.env.appKey,
@@ -19,18 +19,17 @@ app.get('/',(req,res)=>{
       };
     
     const dict = new Dictionary(config);
-    const lookup = dict.synonyms("stubborn");
+    const lookup = dict.synonyms(req.params.id);
     
     lookup.then(function(data) {
-        res.send(data);
+        res.send(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id);
+        console.log(data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id);
 
     },
     function(err) {
         console.log(err);
     });
-    // res.json({
-    //     'msg' :'welcome to wordlink application!'
-    // });
+   
 });
 app.get('/dicant/:id',(req,res)=>{
     var config = {
@@ -100,5 +99,5 @@ switch(n) {
 app.listen(port,()=>{
     console.log(`listening to server on ${port} port`);
     
-})
+});
 module.exports = app;
