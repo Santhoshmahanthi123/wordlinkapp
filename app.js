@@ -62,17 +62,17 @@ app.get('/dicant/:id',(req,res)=>{
     const dict = new Dictionary(config);
     const lookup = dict.antonyms(req.params.id);
     
-    lookup.then(function(data) {
-        res.send(data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id);
+    lookup.then((data)=> {
+        res.send(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
 
-        console.log(data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id);
+        console.log(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
 
     },
     function(err) {
         console.log(err);
     });
 });
-
+app.get('/',(req,res)=>{
     var days = {
         monday:`word of the day is "serry" : "to crowd closely together."`,
         tuesday:`word of the day is "waggish" : "roguish in merriment and good humor." `,
@@ -85,31 +85,38 @@ app.get('/dicant/:id',(req,res)=>{
 var d = new Date();
 var n = d.getDay()
 switch(n) {
-    case 0 :
+    case 1 :
+    res.send(days.monday)
     console.log(days.monday)
     break;
 
-    case 1 :
+    case 2 :
+    res.send(days.tuesday)
     console.log(days.tuesday)
     break;
 
-    case 2 :
+    case 3 :
+    res.send(days.wednesday)
     console.log(days.wednesday)
     break;
 
-    case 3 :
+    case 4 :
+    res.send(days.thursday)
     console.log(days.thursday)
     break;
 
-    case 4 :
+    case 5 :
+    res.send(days.friday)
     console.log(days.friday)
     break;
 
-    case 5 :
+    case 6 :
+    res.send(days.saturday)
     console.log(days.saturday)
     break;
 
-    case 6:
+    case 0:
+    res.send(days.sunday)
     console.log(days.sunday)
     break;
 
@@ -117,6 +124,7 @@ switch(n) {
       console.log('Every day is a good day if you hustle...')
      
 }
+});
 app.listen(port,()=>{
     console.log(`listening to server on ${port} port`);
     
