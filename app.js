@@ -108,7 +108,7 @@ app.get('/dicsyn',(req,res)=>{
     
     syn.then((data) =>{
         res.send(data);
-        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms;
+        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].synonyms;
         for(let i=0;i<synonyms.length;i++) { 
             console.log("The synonyms of the word " +word+ " is " +synonyms[i].text);
         }
@@ -228,7 +228,7 @@ app.get('/dict',(req,res)=>{
         });
         res.send(data)
 
-        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms;
+        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].synonyms;
         for(let i=0;i<synonyms.length;i++) {
             console.log("The synonyms of the word " +word+ " is ");
             console.log(synonyms[i].text);
@@ -255,7 +255,7 @@ app.get('/',(req,res)=>{
 var d = new Date();
 var n = d.getDay()
 switch(n) {
-    case 1 :
+    case 1 : 
     res.send(days.monday)
     console.log(days.monday)
     break;
