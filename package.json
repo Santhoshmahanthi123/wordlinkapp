@@ -17,5 +17,9 @@
     "morgan": "^1.9.1",
     "oxford-dictionary": "^1.4.1",
     "oxford-dictionary-api": "^1.0.1"
+  },
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "readline-sync": "^1.4.9"
   }
 }
