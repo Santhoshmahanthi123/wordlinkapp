@@ -18,12 +18,13 @@ app.get('/dicdef/:id',(req,res)=>{
         source_lang : "en"
       };
     
-    const dict = new Dictionary(config);
-    const lookup = dict.definitions(req.params.id);
+    var dict = new Dictionary(config);
+    var def = dict.definitions(req.params.id);
     
-    lookup.then((data)=> {
-        res.send(`The definition of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
-        console.log(`The definition of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].definitions[0]}"`);
+    def.then((data)=> {
+        res.send(data);
+        const definition = data.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
+        console.log(`The definition of the word "${req.params.id}" is "${definition}"`);
 
     },
   
@@ -39,12 +40,15 @@ app.get('/dicsyn/:id',(req,res)=>{
         source_lang : "en"
       };
     
-    const dict = new Dictionary(config);
-    const lookup = dict.synonyms(req.params.id);
+    var dict = new Dictionary(config);
+    var syn = dict.synonyms(req.params.id);
     
-    lookup.then((data) =>{
-        res.send(`The synonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id}"`);
-        console.log(`The synonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms[0].id}"`);
+    syn.then((data) =>{
+        res.send(data);
+        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms;
+        for(let i=0;i<synonyms.length;i++) {
+            console.log(`The synonyms of  the word "${req.params.id}" are "${synonyms[i].text}`);
+        }
 
     },
     function(err) {
@@ -59,36 +63,92 @@ app.get('/dicant/:id',(req,res)=>{
         source_lang : "en"
       };
     
-    const dict = new Dictionary(config);
-    const lookup = dict.antonyms(req.params.id);
+    var dict = new Dictionary(config);
+    var ant = dict.antonyms(req.params.id);
     
-    lookup.then((data)=> {
-        res.send(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+    ant.then((data)=> {
+        res.send(data);
+        const antonym = data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms;
+        for(let i=0;i<antonym.length;i++)
+        {
+         console.log(`The antonym of the word "${req.params.id}" is "${antonym[i].text}"`);
 
-        console.log(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+        }
 
     },
     function(err) {
         console.log(err);
     });
 });
+
+
 app.get('/dicex/:id',(req,res)=>{
     var config = {
         app_id : process.env.appId,
         app_key : process.env.appKey,
         source_lang : "en"
       };
-    
-    const dict = new Dictionary(config);
-    const lookup = dict.examples(req.params.id);
-    
-    lookup.then((data)=> {
-        res.send(`The example of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].examples[0].text}"`)
-        console.log(`The example of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].examples[0].text}"`)
+      var dict = new Dictionary(config);
+      var ex = dict.examples(req.params.id);
+     ex.then((data)=> {
+        res.send(data)
+        const example = data.results[0].lexicalEntries[0].entries[0].senses[0].examples;
+        for(let i=0;i<example.length;i++)
+        {
+            console.log(`The example of the word "${req.params.id}" is "${example[i].text}"`)
 
-        // res.send(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+        }
+    },
+    function(err) {
+        console.log(err);
+    });
+});
+app.get('/dict/:id',(req,res)=>{
+    var config = {
+        app_id : process.env.appId,
+        app_key : process.env.appKey,
+        source_lang : "en"
+      };
+      var dict = new Dictionary(config);
+      var syno = dict.synonyms(req.params.id);
+      var anto = dict.antonyms(req.params.id);
+      var defi = dict.definitions(req.params.id);
+      var exp  = dict.examples(req.params.id);
+     syno.then((data)=> {
+        anto.then((data)=> {
+            defi.then((data)=>{
+                exp.then((data)=>{
+                    const example = data.results[0].lexicalEntries[0].entries[0].senses[0].examples;
+                    for(let i=0;i<example.length;i++)
+                    {
+                        console.log(`The example of the word "${req.params.id}" is "${example[i].text}"`)
+            
+                    }
 
-        // console.log(`The antonym of the word "${req.params.id}" is "${data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms[0].id}"`);
+                })
+                const definition = data.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
+                console.log(`The definition of the word "${req.params.id}" is "${definition}"`);
+        
+            });
+            // res.send(data)
+    
+            const antonym = data.results[0].lexicalEntries[0].entries[0].senses[0].antonyms;
+            for(let i=0;i<antonym.length;i++)
+            {
+             console.log(`The antonym of the word "${req.params.id}" is "${antonym[i].text}"`);
+    
+            }
+    
+        },
+        function(err) {
+            console.log(err);
+        });
+        res.send(data)
+
+        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms;
+        for(let i=0;i<synonyms.length;i++) {
+            console.log(`The synonyms of  the word "${req.params.id}" are "${synonyms[i].text}`);
+        }
 
     },
     function(err) {
@@ -96,6 +156,7 @@ app.get('/dicex/:id',(req,res)=>{
     });
 });
 app.get('/',(req,res)=>{
+    //for word of the day i used dummy data since i am using oxford dictionary api i wont get word of the day in this api
     var days = {
         monday:`word of the day is "serry" : "to crowd closely together."`,
         tuesday:`word of the day is "waggish" : "roguish in merriment and good humor." `,
