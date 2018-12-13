@@ -9,6 +9,9 @@ const readline = require('readline-sync');
 const port = process.env.PORT || 8080;
 const app = express();
 const Dictionary = require("oxford-dictionary");
+//displaying random words
+const randomWords = require('random-words');
+
 const app_id = process.env.appId;
 const app_key = process.env.appKey ;
 app.use(bodyParser.urlencoded({extended : true}));
@@ -21,52 +24,55 @@ app.get('/check',(req,res)=>{
 
     console.log("Hi " + name + ", nice to meet you.");
 });
+
 app.get('/game',(req,res)=>{
-    res.render('game')
-});
-app.post('/game',(req,res)=>{
-    // res.render('game');
-    var config = {
-        app_id : process.env.appId,
-        app_key : process.env.appKey,
-        source_lang : "en"
-      };    
-    
+
+   const random = randomWords();
+   console.log(random)
+
+//   const result = (word==random) ? true : false;
+//   console.log("The entered word is", word===random);
+  var config = {
+    app_id : process.env.appId,
+    app_key : process.env.appKey,
+    source_lang : "en"
+  };
     var dict = new Dictionary(config);
-    var syn = dict.synonyms(req.body.word.name);
-    
+   var syn = dict.synonyms(random);
     syn.then((data) =>{
-        if(data){
-            res.send(`word found!`);
+    // res.send(data);
+    const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].synonyms;
+    const synarry = [];
 
-        }
+    for(let i=0;i<synonyms.length;i++) { 
+        synarry.push(synonyms[i].text);
+        var out = synonyms[i].text;
+        console.log("The synonyms of the word " +random+ " is " +out);
+    }
+    // console.log('ewfsefs');
+    const word = readline.question("Enter a Matching word with the above word: ");
+    //below statement gives true if word is present else it gives false
+    console.log("Entered word is :", synarry.includes(word));
+    // console.log(typeof(out));
+    for(let j=0;j<synarry.length;j++)
+    {
+        //this will show all the synonyms of the word either user enters true word or false word
+        
+        console.log('The synonyms of the given word are  '+synarry[j])
 
-        // else{
-        //     res.send('word not found!');
+    }
 
-        // }
-       
-        const synonyms = data.results[0].lexicalEntries[0].entries[0].senses[0].subsenses[0].synonyms;
-        // console.log(synonyms)
-        for(let i=0;i<synonyms.length;i++) {
-            // res.send('word found!')
+    res.send(randomWords())
 
-            console.log(`The synonyms of  the word "${req.body.word.name}" are "${synonyms[i].text}"    `);
-            const syn = synonyms[i].text;
-            // console.log(syn);
-            // req.body.word.name==syn ?(res.send('word is found')) : (res.send('not found'));
 
-            // if(req.params.id==syn)
-            // {
-            //     console.log("correct!")
-            // }
-        }
-    })
-    .catch((err)=>{
-        res.send('The word you are searching for is not found!')
-        console.log(err);
-    });
+})
+.catch((err)=>{
+    console.log(err);
 });
+
+
+});
+
 //route for definition of the word
 
 app.get('/dicdef',(req,res)=>{
@@ -94,7 +100,6 @@ app.get('/dicdef',(req,res)=>{
 });
 //route for synonyms of the word
 app.get('/dicsyn',(req,res)=>{
-    res.send
     const word = readline.question("Enter a word which you want to know the synonym");
 
     var config = {
