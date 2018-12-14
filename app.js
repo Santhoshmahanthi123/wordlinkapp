@@ -28,6 +28,7 @@ app.get('/check',(req,res)=>{
 app.get('/game',(req,res)=>{
 
    const random = randomWords();
+   res.send(random);
    console.log(random)
 
 //   const result = (word==random) ? true : false;
@@ -47,39 +48,52 @@ app.get('/game',(req,res)=>{
     for(let i=0;i<synonyms.length;i++) { 
         synarry.push(synonyms[i].text);
         var out = synonyms[i].text;
-        console.log("The synonyms of the word " +random+ " is " +out);
+        //To check the matching word with the given word i am printing the matching synonyms of the random word...
+        console.log(`The synonyms of the word "${random}" is:`,`"${out}"`);
     }
     // console.log('ewfsefs');
     const word = readline.question("Enter a Matching word with the above word: ");
     //below statement gives true if word is present else it gives false
-    console.log("Entered word is :", synarry.includes(word));
-    // console.log(typeof(out));
-    for(let j=0;j<synarry.length;j++)
-    {
-        //this will show all the synonyms of the word either user enters true word or false word
-        
-        console.log('The synonyms of the given word are  '+synarry[j])
-
+    const check = synarry.includes(word);
+    // console.log(typeof(check));
+    console.log(check)
+    if(check === true){
+        return console.log("Hurreyyyyy You won the game in 1 st attempt...!");
     }
+    else if(check !== true)
+    {
+        const def = dict.definitions(random);
+        def.then((data)=> {
+        const definition = data.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
+        console.log(`The hint for the word  "${random}" is: `,`"${definition}"`);
+        const hintword = readline.question("Think twice and enter the matching word now: ");
+        const hintcheck = synarry.includes(hintword);
+        console.log(hintcheck)
+        if(hintcheck === true)
+        {
+            console.log("Hurreyyyyy You won the game in 2 nd attempt...!");
 
-    res.send(randomWords())
-   
-    const def = dict.definitions(random);
+        }
+        else{
+            console.log('Sorry...You have lost the game!');
+            for(var k=0;k<synarry.length;k++)
+            {
+                console.log(`The matching word of "${random}" is:`,`"${synarry[k]}"`);
+
+            }
+
+        }
     
-    def.then((data)=> {
-    // res.send(data);
-    // console.log(data)
-    const definition = data.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
-    console.log("The hint for the word " +random+ " is ");
-    console.log(definition);
-    const hintword = readline.question("Think twice and enter the matching word now: ");
-    console.log("Entered word is :", synarry.includes(hintword));
-
-
-})
-.catch((err)=>{
-    console.log(err);
-});
+    
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+    return console.log("Your 2 nd attempt, Best of luck...!");
+    }
+    else{
+        console.log("Game is about to end!")
+    }
 })
 .catch((err)=>{
     console.log(err);
