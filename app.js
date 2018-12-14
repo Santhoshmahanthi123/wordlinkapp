@@ -63,14 +63,27 @@ app.get('/game',(req,res)=>{
     }
 
     res.send(randomWords())
+   
+    const def = dict.definitions(random);
+    
+    def.then((data)=> {
+    // res.send(data);
+    // console.log(data)
+    const definition = data.results[0].lexicalEntries[0].entries[0].senses[0].definitions[0];
+    console.log("The hint for the word " +random+ " is ");
+    console.log(definition);
+    const hintword = readline.question("Think twice and enter the matching word now: ");
+    console.log("Entered word is :", synarry.includes(hintword));
 
 
 })
 .catch((err)=>{
     console.log(err);
 });
-
-
+})
+.catch((err)=>{
+    console.log(err);
+});
 });
 
 //route for definition of the word
